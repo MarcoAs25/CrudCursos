@@ -1,4 +1,4 @@
-package com.marcoas.crudCursos.category;
+package com.marcoas.crudCursos.category.service;
 
 import static common.CategoryConstants.*;
 import static org.assertj.core.api.Assertions.*;
