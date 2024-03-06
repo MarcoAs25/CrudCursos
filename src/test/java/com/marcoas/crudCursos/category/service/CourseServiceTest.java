@@ -1,7 +1,6 @@
 package com.marcoas.crudCursos.category.service;
 
 import com.marcoas.crudCursos.controller.exception.ApiError;
-import com.marcoas.crudCursos.dto.CategoryDTO;
 import com.marcoas.crudCursos.dto.CourseDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.model.Category;
@@ -20,9 +19,10 @@ import org.springframework.data.domain.PageImpl;
 import java.util.List;
 import java.util.Optional;
 
-import static common.CategoryConstants.*;
+import static common.CategoryConstants.CATEGORYENTITY;
 import static common.CourseConstants.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -46,25 +46,25 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void createCategory_WithInvalidData1_ThrowsException() {
+    public void createCourse_WithInvalidData1_ThrowsException() {
         assertThatThrownBy(() -> courseService.create(INVALIDCOURSEDTO1))
                 .isInstanceOf(ApiError.class);
     }
 
     @Test
-    public void createCategory_WithInvalidData2_ThrowsException() {
+    public void createCourse_WithInvalidData2_ThrowsException() {
         assertThatThrownBy(() -> courseService.create(INVALIDCOURSEDTO2))
                 .isInstanceOf(ApiError.class);
     }
 
     @Test
-    public void createCategory_WithInvalidData3_ThrowsException() {
+    public void createCourse_WithInvalidData3_ThrowsException() {
         assertThatThrownBy(() -> courseService.create(INVALIDCOURSEDTO3))
                 .isInstanceOf(ApiError.class);
     }
 
     @Test
-    public void createCategory_ThrowsException() {
+    public void createCourse_ThrowsException() {
         when(categoryService.findById(anyLong())).thenThrow(ApiError.class);
         assertThatThrownBy(() -> courseService.create(COURSEDTO))
                 .isInstanceOf(ApiError.class);
@@ -78,7 +78,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void findCategoryById_WithInvalidId_ThrowsException() {
+    public void findCourseById_WithInvalidId_ThrowsException() {
         when(courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> courseService.findById(1L)).isInstanceOf(ApiError.class);
     }
@@ -109,7 +109,7 @@ public class CourseServiceTest {
         assertThatThrownBy(() -> courseService.findAllPageable(paginateDTO)).isInstanceOf(ApiError.class);
     }
     @Test
-    public void findAllCategory_ReturnsList() {
+    public void findAllCourse_ReturnsList() {
         List<Course> courses = List.of(
                 COURSEENTITY,
                 COURSEENTITY,
@@ -122,7 +122,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void findAllCategory_ReturnsListEmpty() {
+    public void findAllCourse_ReturnsListEmpty() {
 
         List<Course> courses = List.of();
         when(courseRepository.findAll()).thenReturn(courses);
@@ -133,7 +133,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void findAllCategory_ThrowsException() {
+    public void findAllCourse_ThrowsException() {
         when(courseRepository.findAll()).thenThrow(RuntimeException.class);
         assertThatThrownBy(() -> courseService.findAll()).isInstanceOf(ApiError.class);
     }
@@ -183,7 +183,7 @@ public class CourseServiceTest {
         assertThatThrownBy(() -> courseService.update(1l, dto)).isInstanceOf(ApiError.class);
     }
     @Test
-    public void deleteCategory_ThrowsException() {
+    public void deleteCourse_ThrowsException() {
         doThrow(RuntimeException.class).when(courseRepository).deleteById(anyLong());
         assertThatThrownBy(() -> courseService.delete(anyLong()))
                 .isInstanceOf(ApiError.class);
