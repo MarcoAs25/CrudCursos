@@ -28,9 +28,6 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             course.setName(dto.name());
             course.setCategory(categoryService.findById(dto.categoryId()));
             return repository.save(course);
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao criar curso.");
@@ -49,9 +46,6 @@ public class CourseService implements BaseService<Course, CourseDTO> {
                 return repository.save(course);
             }
             throw new ApiError("Erro ao buscar curso.");
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao atualizar curso.");
@@ -62,10 +56,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     public Course findById(Long id){
         try {
             return repository.findById(id).orElseThrow(() -> {throw new ApiError("curso não encontrado.");});
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao buscar curso.");
         }
@@ -75,10 +66,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     public List<Course> findAll() {
         try {
             return repository.findAll();
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao buscar cursos.");
         }
@@ -88,10 +76,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     public Page<Course> findAllPageable(PaginateDTO paginateSortDTO){
         try {
             return repository.findAll(paginateSortDTO.buildPageable());
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao buscar cursos.");
         }
@@ -100,14 +85,8 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     @Override
     public void delete(Long id){
         try {
-            Course course = repository.findById(id).orElseThrow(() -> {
-                throw new ApiError("Curso não encontrado.");
-            });
-            repository.delete(course);
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
-        } catch (DataIntegrityViolationException e) {
+            repository.deleteById(id);
+        }catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             throw e;
         } catch (Exception e) {

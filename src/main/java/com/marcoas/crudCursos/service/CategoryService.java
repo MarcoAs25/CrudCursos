@@ -25,9 +25,6 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             Category categoria = new Category();
             categoria.setName(dto.name());
             return repository.save(categoria);
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao criar Categoria");
@@ -44,21 +41,15 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
                 return repository.save(categoria);
             }
             throw new ApiError("Categoria não encontrada.");
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            throw new ApiError("Erro ao atualizar Categoria");
         }
     }
     @Override
     public Category findById(Long id){
         try {
             return repository.findById(id).orElseThrow(() -> {throw new ApiError("Erro ao buscar categoria.");});
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao buscar categoria.");
@@ -79,9 +70,6 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
     public Page<Category> findAllPageable(PaginateDTO paginateSortDTO){
         try {
             return repository.findAll(paginateSortDTO.buildPageable());
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiError("Erro ao buscar categorias.");
@@ -90,13 +78,7 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
     @Override
     public void delete(Long id){
         try {
-            Category category = repository.findById(id).orElseThrow(() -> {
-                throw new ApiError("Categoria não encontrada.");
-            });
-            repository.delete(category);
-        } catch (ApiError e){
-            e.printStackTrace();
-            throw e;
+            repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             throw e;
