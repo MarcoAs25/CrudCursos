@@ -3,6 +3,7 @@ package com.marcoas.crudCursos.controller;
 import com.marcoas.crudCursos.dto.CategoryDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,12 +32,12 @@ public class CategoryController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    private ResponseEntity<?> create(@RequestBody CategoryDTO dto){
+    private ResponseEntity<?> create(@Valid @RequestBody CategoryDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping(value = "/{id}")
-    private ResponseEntity<?> update(@PathVariable Long id, @RequestBody CategoryDTO dto){
+    private ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CategoryDTO dto){
         return ResponseEntity.ok(service.update(id, dto));
     }
 
