@@ -9,5 +9,6 @@ public class CourseConstants {
     public static final CourseDTO INVALIDCOURSEDTO3 = new CourseDTO("Angular", null);
 
     public static final Course COURSEENTITY = new Course(1l,"Angular", CategoryConstants.CATEGORYENTITY);
+    public static final Course COURSEENTITYTOSAVE = new Course(null,"Angular", CategoryConstants.CATEGORYENTITY);
 
 }
