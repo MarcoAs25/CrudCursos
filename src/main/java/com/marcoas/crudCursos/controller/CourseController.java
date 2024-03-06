@@ -4,6 +4,7 @@ import com.marcoas.crudCursos.dto.CourseDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.service.CourseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class CourseController {
 
     @PostMapping
     private ResponseEntity<?> create(@RequestBody CourseDTO dto){
-        return ResponseEntity.ok(service.create(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping(value = "/{id}")
