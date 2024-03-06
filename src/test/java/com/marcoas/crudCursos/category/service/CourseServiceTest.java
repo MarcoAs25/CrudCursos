@@ -21,8 +21,7 @@ import java.util.Optional;
 
 import static common.CategoryConstants.CATEGORYENTITY;
 import static common.CourseConstants.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -82,6 +81,7 @@ public class CourseServiceTest {
         when(courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> courseService.findById(1L)).isInstanceOf(ApiError.class);
     }
+
     @Test
     public void findCourseByPageable_WithValidPaginate_ReturnsPage() {
         Long size = 3l;
@@ -102,12 +102,14 @@ public class CourseServiceTest {
         assertThat(Long.valueOf(sut.getNumber())).isEqualTo(page);
         assertThat(Long.valueOf(sut.getContent().size())).isLessThanOrEqualTo(size);
     }
+
     @Test
     public void findCourseByPageable_WithInvalidPaginate_ThrowsException() {
         PaginateDTO paginateDTO = new PaginateDTO(10L, 0L);
         when(courseRepository.findAll(paginateDTO.buildPageable())).thenThrow(RuntimeException.class);
         assertThatThrownBy(() -> courseService.findAllPageable(paginateDTO)).isInstanceOf(ApiError.class);
     }
+
     @Test
     public void findAllCourse_ReturnsList() {
         List<Course> courses = List.of(
@@ -141,7 +143,7 @@ public class CourseServiceTest {
     @Test
     public void updateCourse_WithValidData_ReturnsUpdatedCourse() {
         Long courseId = 1L;
-        CourseDTO dto = new CourseDTO("New Course Name",2L);
+        CourseDTO dto = new CourseDTO("New Course Name", 2L);
         Category newCategory = new Category(2L, "new CategoryName");
         Category existingCategory = new Category(1l, "Old Category Name");
         Course existingCourse = new Course(courseId, "Angular", existingCategory);
@@ -160,28 +162,34 @@ public class CourseServiceTest {
 
     @Test
     public void updateCourse_WithInvalidData1_ThrowsException() {
-        CourseDTO dto = new CourseDTO(null,2L);
+        CourseDTO dto = new CourseDTO(null, 2L);
         assertThatThrownBy(() -> courseService.update(1l, dto)).isInstanceOf(ApiError.class);
     }
 
     @Test
     public void updateCourse_WithInvalidData2_ThrowsException() {
-        CourseDTO dto = new CourseDTO(" ",2L);
+        CourseDTO dto = new CourseDTO(" ", 2L);
         assertThatThrownBy(() -> courseService.update(1l, dto)).isInstanceOf(ApiError.class);
     }
 
     @Test
     public void updateCourse_WithInvalidData3_ThrowsException() {
-        CourseDTO dto = new CourseDTO(" ",null);
+        CourseDTO dto = new CourseDTO(" ", null);
         assertThatThrownBy(() -> courseService.update(1l, dto)).isInstanceOf(ApiError.class);
     }
 
     @Test
     public void updateCourse_ThrowsException() {
-        CourseDTO dto = new CourseDTO("valid",2l);
+        CourseDTO dto = new CourseDTO("valid", 2l);
         when(courseRepository.findById(anyLong())).thenThrow(RuntimeException.class);
         assertThatThrownBy(() -> courseService.update(1l, dto)).isInstanceOf(ApiError.class);
     }
+
+    @Test
+    public void deleteCourse_ReturnsNoContent() {
+        assertThatCode(() -> courseService.delete(anyLong())).doesNotThrowAnyException();
+    }
+
     @Test
     public void deleteCourse_ThrowsException() {
         doThrow(RuntimeException.class).when(courseRepository).deleteById(anyLong());
