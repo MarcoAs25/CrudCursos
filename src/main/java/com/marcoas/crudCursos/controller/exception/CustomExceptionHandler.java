@@ -16,7 +16,7 @@ public class CustomExceptionHandler {
     @ResponseBody
     public final ResponseEntity<ErrorDetails> handleResourceNotFoundException(DataIntegrityViolationException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails("Esta ação não pode ser concluída pois este item está vinculado a outro.");
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -36,6 +36,6 @@ public class CustomExceptionHandler {
     @ExceptionHandler(ApiError.class)
     @ResponseBody
     public final ResponseEntity<ErrorDetails> handleResourceNotFoundException(ApiError ex) {
-        return new ResponseEntity<>(new ErrorDetails(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorDetails(ex.getMessage()), ex.getStatusCode());
     }
 }
