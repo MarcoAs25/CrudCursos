@@ -1,4 +1,4 @@
-package com.marcoas.crudCursos.category.service;
+package com.marcoas.crudCursos.service;
 
 import com.marcoas.crudCursos.controller.exception.ApiError;
 import com.marcoas.crudCursos.dto.CourseDTO;
@@ -6,8 +6,6 @@ import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.model.Category;
 import com.marcoas.crudCursos.model.Course;
 import com.marcoas.crudCursos.repository.CourseRepository;
-import com.marcoas.crudCursos.service.CategoryService;
-import com.marcoas.crudCursos.service.CourseService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,7 +1,6 @@
-package com.marcoas.crudCursos.category.controller;
+package com.marcoas.crudCursos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marcoas.crudCursos.controller.CategoryController;
 import com.marcoas.crudCursos.controller.exception.ApiError;
 import com.marcoas.crudCursos.dto.CategoryDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
@@ -26,7 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CategoryController.class)
 public class CategoryControllerTest {

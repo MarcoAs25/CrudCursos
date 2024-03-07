@@ -1,9 +1,8 @@
-package com.marcoas.crudCursos.category.repository;
+package com.marcoas.crudCursos.repository;
 
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.model.Category;
 import com.marcoas.crudCursos.model.Course;
-import com.marcoas.crudCursos.repository.CourseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

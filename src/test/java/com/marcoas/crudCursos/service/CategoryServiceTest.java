@@ -1,17 +1,10 @@
-package com.marcoas.crudCursos.category.service;
-
-import static common.CategoryConstants.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+package com.marcoas.crudCursos.service;
 
 import com.marcoas.crudCursos.controller.exception.ApiError;
 import com.marcoas.crudCursos.dto.CategoryDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.model.Category;
 import com.marcoas.crudCursos.repository.CategoryRepository;
-import com.marcoas.crudCursos.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +15,13 @@ import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
 import java.util.Optional;
+
+import static common.CategoryConstants.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
