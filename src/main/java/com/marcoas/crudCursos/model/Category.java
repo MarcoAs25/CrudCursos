@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
@@ -12,7 +14,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CatId")

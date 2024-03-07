@@ -9,6 +9,9 @@ import com.marcoas.crudCursos.service.templates.BaseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
@@ -42,6 +45,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw new ApiError("Erro ao criar curso.");
         }
     }
+    @CachePut(value = "courses", key = "#id")
     @Transactional
     @Override
     public Course update(Long id, CourseDTO dto){
@@ -64,6 +68,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
         }
     }
 
+    @Cacheable("courses")
     @Override
     public Course findById(Long id){
         try {
@@ -96,6 +101,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw new ApiError("Erro ao buscar cursos.");
         }
     }
+    @CacheEvict(value = "courses", key = "#id")
     @Transactional
     @Override
     public void delete(Long id){

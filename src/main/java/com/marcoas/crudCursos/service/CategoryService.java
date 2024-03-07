@@ -9,6 +9,9 @@ import com.marcoas.crudCursos.service.templates.BaseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
@@ -39,6 +42,7 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw new ApiError("Erro ao criar Categoria");
         }
     }
+    @CachePut(value = "categoryes", key = "#id")
     @Transactional
     @Override
     public Category update(Long id, CategoryDTO dto){
@@ -59,6 +63,7 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw new ApiError("Erro ao atualizar Categoria");
         }
     }
+    @Cacheable("categoryes")
     @Override
     public Category findById(Long id){
         try {
@@ -91,6 +96,7 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw new ApiError("Erro ao buscar categorias.");
         }
     }
+    @CacheEvict(value = "categoryes", key = "#id")
     @Transactional
     @Override
     public void delete(Long id){
