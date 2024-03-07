@@ -23,6 +23,6 @@ public class Course {
     private String name;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "CouCategoriaId", referencedColumnName = "CatId")
+    @JoinColumn(name = "CouCategoryId", referencedColumnName = "CatId")
     private Category category;
 }
