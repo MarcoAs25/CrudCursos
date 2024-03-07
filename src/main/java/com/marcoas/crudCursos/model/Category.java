@@ -20,7 +20,7 @@ public class Category {
 
     @NotBlank
     @Basic(optional = false)
-    @Column(name = "CatNome", unique = true)
+    @Column(name = "CatName", unique = true)
     private String name;
 
     @Override

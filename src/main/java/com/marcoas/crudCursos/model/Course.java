@@ -19,7 +19,7 @@ public class Course {
 
     @NotBlank
     @Basic(optional = false)
-    @Column(name = "CouNome", unique = true)
+    @Column(name = "CouName", unique = true)
     private String name;
 
     @ManyToOne(optional = false)
