@@ -5,13 +5,16 @@ import com.marcoas.crudCursos.dto.CourseDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.model.Course;
 import com.marcoas.crudCursos.repository.CourseRepository;
+import com.marcoas.crudCursos.service.events.CategoryUpdatedEvent;
 import com.marcoas.crudCursos.service.templates.BaseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
@@ -25,6 +28,7 @@ import java.util.Objects;
 public class CourseService implements BaseService<Course, CourseDTO> {
     private final CourseRepository repository;
     private final CategoryService categoryService;
+    private final CacheManager cacheManager;
     @Transactional
     @Override
     public Course create(CourseDTO dto){
@@ -67,7 +71,11 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw new ApiError("Erro ao atualizar curso.");
         }
     }
-
+    @EventListener
+    public void handleCategoryUpdatedEvent(CategoryUpdatedEvent event) {
+        List<Course> courses = repository.findByCategory_Id(event.getCategoryId());
+        courses.forEach(course -> cacheManager.getCache("courses").evict(course.getId()));
+    }
     @Cacheable("courses")
     @Override
     public Course findById(Long id){

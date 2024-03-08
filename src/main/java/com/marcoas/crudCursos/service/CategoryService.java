@@ -5,13 +5,17 @@ import com.marcoas.crudCursos.dto.CategoryDTO;
 import com.marcoas.crudCursos.dto.PaginateDTO;
 import com.marcoas.crudCursos.model.Category;
 import com.marcoas.crudCursos.repository.CategoryRepository;
+import com.marcoas.crudCursos.service.events.CategoryUpdatedEvent;
 import com.marcoas.crudCursos.service.templates.BaseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
@@ -23,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService implements BaseService<Category, CategoryDTO> {
     private final CategoryRepository repository;
+    private final ApplicationEventPublisher eventPublisher;
     @Transactional
     @Override
     public Category create(CategoryDTO dto){
@@ -51,7 +56,9 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
 
             Category categoria = findById(id);
             categoria.setName(dto.name());
-            return repository.save(categoria);
+            categoria = repository.save(categoria);
+            eventPublisher.publishEvent(new CategoryUpdatedEvent(id));
+            return categoria;
         }  catch (ApiError e){
             e.printStackTrace();
             throw e;
