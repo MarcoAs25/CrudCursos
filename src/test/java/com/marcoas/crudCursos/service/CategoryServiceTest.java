@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,8 +22,7 @@ import static common.CategoryConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -31,6 +31,8 @@ public class CategoryServiceTest {
     private CategoryService categoryService;
     @Mock
     private CategoryRepository categoryRepository;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @Test
     public void createCategory_WithValidData_ReturnsCategory() {
@@ -140,7 +142,6 @@ public class CategoryServiceTest {
 
 
         Category updatedCategory = categoryService.update(categoryId, dto);
-
         assertThat(updatedCategory).isNotNull();
         assertThat(updatedCategory.getName()).isEqualTo(dto.name());
     }
