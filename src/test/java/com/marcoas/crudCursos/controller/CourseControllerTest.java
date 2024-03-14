@@ -23,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -142,7 +141,7 @@ public class CourseControllerTest {
         );
         Page<Course> coursePages = new PageImpl<>(courses);
 
-        when(courseService.findAllPageable(any(PaginateDTO.class))).thenReturn(coursePages);
+        when(courseService.findAllPageable(eq(null), any(PaginateDTO.class))).thenReturn(coursePages);
 
         mockMvc.perform(get("/api/course/pageable")
                         .param("size", "10")
@@ -152,7 +151,7 @@ public class CourseControllerTest {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(courses.size()));
 
-        when(courseService.findAllPageable(any(PaginateDTO.class))).thenReturn(new PageImpl<>(List.of()));
+        when(courseService.findAllPageable(eq(null), any(PaginateDTO.class))).thenReturn(new PageImpl<>(List.of()));
 
         mockMvc.perform(get("/api/course/pageable")
                         .param("size", "10")

@@ -22,8 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -128,7 +127,7 @@ public class CategoryControllerTest {
         );
         Page<Category> categoryPage = new PageImpl<>(categories);
 
-        when(categoryService.findAllPageable(any(PaginateDTO.class))).thenReturn(categoryPage);
+        when(categoryService.findAllPageable(eq(null), any(PaginateDTO.class))).thenReturn(categoryPage);
 
         mockMvc.perform(get("/api/category/pageable")
                         .param("size", "10")
@@ -138,7 +137,7 @@ public class CategoryControllerTest {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(categories.size()));
 
-        when(categoryService.findAllPageable(any(PaginateDTO.class))).thenReturn(new PageImpl<>(List.of()));
+        when(categoryService.findAllPageable(eq(null), any(PaginateDTO.class))).thenReturn(new PageImpl<>(List.of()));
 
         mockMvc.perform(get("/api/category/pageable")
                         .param("size", "10")
@@ -148,7 +147,6 @@ public class CategoryControllerTest {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(0));
     }
-
     @Test
     public void updateCategory_WithValidData_ReturnsCategory() throws Exception {
         when(categoryService.update(1l, CategoryConstants.CATEGORYDTO)).thenReturn(CategoryConstants.CATEGORYENTITY);

@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -84,9 +85,9 @@ public class CategoryServiceTest {
                 new Category(2l, "2"),
                 new Category(3l, "3"));
         Page<Category> result = new PageImpl<>(cat);
-        when(categoryRepository.findAll(paginateDTO.buildPageable())).thenReturn(result);
+        when(categoryRepository.findByNameContains(any(), any(Pageable.class))).thenReturn(result);
 
-        Page<Category> resultPage = categoryService.findAllPageable(paginateDTO);
+        Page<Category> resultPage = categoryService.findAllPageable(null, paginateDTO);
 
         assertThat(resultPage).isNotNull();
         assertThat(Long.valueOf(resultPage.getNumber())).isEqualTo(page);
@@ -96,8 +97,8 @@ public class CategoryServiceTest {
     @Test
     public void findCategoryByPageable_WithInvalidPaginate_ThrowsException() {
         PaginateDTO paginateDTO = new PaginateDTO(10L, 0L);
-        when(categoryRepository.findAll(paginateDTO.buildPageable())).thenThrow(RuntimeException.class);
-        assertThatThrownBy(() -> categoryService.findAllPageable(paginateDTO)).isInstanceOf(ApiError.class);
+        when(categoryRepository.findByNameContains(any(), any(Pageable.class))).thenThrow(RuntimeException.class);
+        assertThatThrownBy(() -> categoryService.findAllPageable(null, paginateDTO)).isInstanceOf(ApiError.class);
     }
 
     @Test
