@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -21,8 +22,7 @@ import java.util.Optional;
 import static common.CategoryConstants.CATEGORYENTITY;
 import static common.CourseConstants.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -94,9 +94,9 @@ public class CourseServiceTest {
                 COURSEENTITY,
                 COURSEENTITY);
         Page<Course> result = new PageImpl<>(course);
-        when(courseRepository.findAll(paginateDTO.buildPageable())).thenReturn(result);
+        when(courseRepository.findByNameContainsOrCategory_NameContains(any(),any(Pageable.class))).thenReturn(result);
 
-        Page<Course> sut = courseService.findAllPageable(paginateDTO);
+        Page<Course> sut = courseService.findAllPageable(null, paginateDTO);
 
         assertThat(sut).isNotNull();
         assertThat(Long.valueOf(sut.getNumber())).isEqualTo(page);
@@ -106,8 +106,8 @@ public class CourseServiceTest {
     @Test
     public void findCourseByPageable_WithInvalidPaginate_ThrowsException() {
         PaginateDTO paginateDTO = new PaginateDTO(10L, 0L);
-        when(courseRepository.findAll(paginateDTO.buildPageable())).thenThrow(RuntimeException.class);
-        assertThatThrownBy(() -> courseService.findAllPageable(paginateDTO)).isInstanceOf(ApiError.class);
+        when(courseRepository.findByNameContainsOrCategory_NameContains(any(),any(Pageable.class))).thenThrow(RuntimeException.class);
+        assertThatThrownBy(() -> courseService.findAllPageable(null, paginateDTO)).isInstanceOf(ApiError.class);
     }
 
     @Test

@@ -32,7 +32,7 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
     @Override
     public Category create(CategoryDTO dto){
         try {
-            if(StringUtils.isBlank(dto.name())) throw new ApiError("Campo(s) Inválido(s).");
+            if(StringUtils.isBlank(dto.name())) throw new ApiError("Invalid field(s).");
             Category categoria = new Category();
             categoria.setName(dto.name());
             return repository.save(categoria);
@@ -44,15 +44,15 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao criar Categoria");
+            throw new ApiError("Error creating category");
         }
     }
-    @CachePut(value = "categoryes", key = "#id")
+    @CachePut(value = "categories", key = "#id")
     @Transactional
     @Override
     public Category update(Long id, CategoryDTO dto){
         try {
-            if(StringUtils.isBlank(dto.name())) throw new ApiError("Campo(s) Inválido(s).");
+            if(StringUtils.isBlank(dto.name())) throw new ApiError("Invalid field(s).");
 
             Category categoria = findById(id);
             categoria.setName(dto.name());
@@ -67,20 +67,20 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao atualizar Categoria");
+            throw new ApiError("Error updating category.");
         }
     }
-    @Cacheable("categoryes")
+    @Cacheable("categories")
     @Override
     public Category findById(Long id){
         try {
-            return repository.findById(id).orElseThrow(() -> {throw new ApiError("Categoria não encontrada.", HttpStatusCode.valueOf(404));});
+            return repository.findById(id).orElseThrow(() -> {throw new ApiError("Category not found.", HttpStatusCode.valueOf(404));});
         } catch (ApiError e){
             e.printStackTrace();
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao buscar categoria.");
+            throw new ApiError("Error searching category.");
         }
     }
 
@@ -90,20 +90,20 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             return repository.findAll();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao buscar categorias.");
+            throw new ApiError("Error searching categories.");
         }
     }
 
     @Override
-    public Page<Category> findAllPageable(PaginateDTO paginateSortDTO){
+    public Page<Category> findAllPageable(String filter, PaginateDTO paginateSortDTO){
         try {
-            return repository.findAll(paginateSortDTO.buildPageable());
+            return repository.findByNameContains(filter, paginateSortDTO.buildPageable());
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao buscar categorias.");
+            throw new ApiError("Error searching categories.");
         }
     }
-    @CacheEvict(value = "categoryes", key = "#id")
+    @CacheEvict(value = "categories", key = "#id")
     @Transactional
     @Override
     public void delete(Long id){
@@ -114,7 +114,7 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao excluir categoria.");
+            throw new ApiError("Error deleting category.");
         }
     }
 }

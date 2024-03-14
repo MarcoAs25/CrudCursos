@@ -43,8 +43,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Requisição Inválida", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     @GetMapping("/pageable")
-    private ResponseEntity<Page<Category>> findAllPageable(@RequestParam(name = "size") Long size, @RequestParam(name = "page") Long page) {
-        return ResponseEntity.ok(service.findAllPageable(new PaginateDTO(size, page)));
+    private ResponseEntity<Page<Category>> findAllPageable(@RequestParam(name = "size") Long size, @RequestParam(name = "page") Long page, @RequestParam(name = "filter", required = false) String filter) {
+        return ResponseEntity.ok(service.findAllPageable(filter, new PaginateDTO(size, page)));
     }
 
     @Operation(summary = "Obtém uma categoria através do id ")
