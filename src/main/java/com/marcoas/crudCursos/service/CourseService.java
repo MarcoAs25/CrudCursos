@@ -33,7 +33,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     @Override
     public Course create(CourseDTO dto){
         try {
-            if(StringUtils.isBlank(dto.name()) || Objects.isNull(dto.categoryId())) throw new ApiError("Campo(s) Inválido(s).");
+            if(StringUtils.isBlank(dto.name()) || Objects.isNull(dto.categoryId())) throw new ApiError("Invalid field(s).");
             Course course = new Course();
             course.setName(dto.name());
             course.setCategory(categoryService.findById(dto.categoryId()));
@@ -46,7 +46,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao criar curso.");
+            throw new ApiError("Error creating course.");
         }
     }
     @CachePut(value = "courses", key = "#id")
@@ -54,7 +54,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     @Override
     public Course update(Long id, CourseDTO dto){
         try {
-            if(StringUtils.isBlank(dto.name()) || Objects.isNull(dto.categoryId())) throw new ApiError("Campo(s) Inválido(s).");
+            if(StringUtils.isBlank(dto.name()) || Objects.isNull(dto.categoryId())) throw new ApiError("Invalid field(s).");
 
             Course course = findById(id);
             course.setName(dto.name());
@@ -68,7 +68,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw e;
         }  catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao atualizar curso.");
+            throw new ApiError("Error updating course.");
         }
     }
     @EventListener
@@ -80,13 +80,13 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     @Override
     public Course findById(Long id){
         try {
-            return repository.findById(id).orElseThrow(() -> {throw new ApiError("curso não encontrado.", HttpStatusCode.valueOf(404));});
+            return repository.findById(id).orElseThrow(() -> {throw new ApiError("Course not found.", HttpStatusCode.valueOf(404));});
         } catch (ApiError e){
             e.printStackTrace();
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao buscar curso.");
+            throw new ApiError("Error searching course.");
         }
     }
 
@@ -96,17 +96,17 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             return repository.findAll();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao buscar cursos.");
+            throw new ApiError("Error searching courses.");
         }
     }
 
     @Override
-    public Page<Course> findAllPageable(PaginateDTO paginateSortDTO){
+    public Page<Course> findAllPageable(String filter, PaginateDTO paginateSortDTO){
         try {
-            return repository.findAll(paginateSortDTO.buildPageable());
+            return repository.findByNameContainsOrCategory_NameContains(filter, paginateSortDTO.buildPageable());
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao buscar cursos.");
+            throw new ApiError("Error searching course.");
         }
     }
     @CacheEvict(value = "courses", key = "#id")
@@ -120,7 +120,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiError("Erro ao excluir curso.");
+            throw new ApiError("Error deleting course.");
         }
     }
 }

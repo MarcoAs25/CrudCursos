@@ -12,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 public class CustomExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public final ResponseEntity<ErrorDetails> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails("Esta ação não pode ser concluída pois este item está vinculado a outro.");
+        ErrorDetails errorDetails = new ErrorDetails("This action cannot be completed because this item/resource is linked to another.\"");
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
@@ -24,7 +24,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorDetails> handleException(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails("Um erro inesperado ocorreu.");
+        ErrorDetails errorDetails = new ErrorDetails("An unexpected error occurred.");
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
