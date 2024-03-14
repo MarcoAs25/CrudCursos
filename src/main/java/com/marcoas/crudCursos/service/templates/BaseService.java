@@ -10,6 +10,6 @@ public interface BaseService<T, DTO> {
     T update(Long id, DTO dto);
     T findById(Long id);
     List<T> findAll();
-    Page<T> findAllPageable(PaginateDTO paginateSortDTO);
+    Page<T> findAllPageable(String filter, PaginateDTO paginateSortDTO);
     void delete(Long id);
 }
