@@ -47,7 +47,6 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw new ApiError("Error creating category");
         }
     }
-    @CachePut(value = "categories", key = "#id")
     @Transactional
     @Override
     public Category update(Long id, CategoryDTO dto){
@@ -57,7 +56,6 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             Category categoria = findById(id);
             categoria.setName(dto.name());
             categoria = repository.save(categoria);
-            eventPublisher.publishEvent(new CategoryUpdatedEvent(id));
             return categoria;
         }  catch (ApiError e){
             e.printStackTrace();
@@ -70,7 +68,6 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw new ApiError("Error updating category.");
         }
     }
-    @Cacheable("categories")
     @Override
     public Category findById(Long id){
         try {
@@ -103,7 +100,6 @@ public class CategoryService implements BaseService<Category, CategoryDTO> {
             throw new ApiError("Error searching categories.");
         }
     }
-    @CacheEvict(value = "categories", key = "#id")
     @Transactional
     @Override
     public void delete(Long id){

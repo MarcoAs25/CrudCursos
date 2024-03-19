@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
@@ -129,11 +130,12 @@ public class CategoryControllerTest {
 
         when(categoryService.findAllPageable(eq(null), any(PaginateDTO.class))).thenReturn(categoryPage);
 
-        mockMvc.perform(get("/api/category/pageable")
+        ResultActions ra = mockMvc.perform(get("/api/category/pageable")
                         .param("size", "10")
                         .param("page", "0")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                        .contentType(MediaType.APPLICATION_JSON));
+        System.out.println(ra.toString());
+        ra.andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(categories.size()));
 

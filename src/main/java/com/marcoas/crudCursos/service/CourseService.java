@@ -10,10 +10,6 @@ import com.marcoas.crudCursos.service.templates.BaseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -28,7 +24,6 @@ import java.util.Objects;
 public class CourseService implements BaseService<Course, CourseDTO> {
     private final CourseRepository repository;
     private final CategoryService categoryService;
-    private final CacheManager cacheManager;
     @Transactional
     @Override
     public Course create(CourseDTO dto){
@@ -49,7 +44,6 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw new ApiError("Error creating course.");
         }
     }
-    @CachePut(value = "courses", key = "#id")
     @Transactional
     @Override
     public Course update(Long id, CourseDTO dto){
@@ -74,9 +68,7 @@ public class CourseService implements BaseService<Course, CourseDTO> {
     @EventListener
     public void handleCategoryUpdatedEvent(CategoryUpdatedEvent event) {
         List<Course> courses = repository.findByCategory_Id(event.getCategoryId());
-        courses.forEach(course -> cacheManager.getCache("courses").evict(course.getId()));
     }
-    @Cacheable("courses")
     @Override
     public Course findById(Long id){
         try {
@@ -109,7 +101,6 @@ public class CourseService implements BaseService<Course, CourseDTO> {
             throw new ApiError("Error searching course.");
         }
     }
-    @CacheEvict(value = "courses", key = "#id")
     @Transactional
     @Override
     public void delete(Long id){

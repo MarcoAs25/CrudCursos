@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import java.util.List;
 
 @SpringBootApplication
-@EnableCaching
 public class CrudCoursesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CrudCoursesApplication.class, args);
